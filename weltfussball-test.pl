@@ -21,7 +21,7 @@ my $team1;
 my $team2;
 my $filename;
 
-my $start_url = "http://www.weltfussball.de/alle_spiele/bundesliga-2017-2018/";
+my $start_url = "http://www.weltfussball.de/alle_spiele/bundesliga-2021-2022/";
 # --> Define the start page (to find under Liga -> Spielplan) 
 
 if ($start_url =~ /alle_spiele\/(.+?)\//) {
