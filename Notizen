@@ -1,0 +1,12 @@
+Ideen:
+- einzelne Ticker-Texte mit zugehöriger Minute in eigene Einträge
+- Ein- und Auswechslungen und sonstige Ereignisse, die keinen zugehörigen Text haben, aussortieren
+  - Einwechslungen
+  - Spielbeginn
+  - Ende 1. Halbzeit
+  - Anpfiff 2. Halbzeit
+  - Spielende
+  - Fazit
+- Ergebnis aus dem Titel extrahieren und in eigene Spalte übertragen
+- Vorberichte, Fazit und Spiel-Ticker voneinander trennen
+- Datum vereinheitlichen (ohne Wochentag)
