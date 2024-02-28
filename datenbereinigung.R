@@ -1,5 +1,7 @@
 library(tidyverse)
 
+#dataframes importieren (Output-files von import_weltfussball.R)
+
 dataframe_files <- c(
   "./weltfussball_liveticker/df_weltfussball_1718_mit_zeit.RData",
   "./weltfussball_liveticker/df_weltfussball_1819_mit_zeit.RData",
@@ -10,44 +12,44 @@ dataframe_files <- c(
 )
 
 dataframes <- list()
-
 for(datei in dataframe_files) {
   load(datei)
   dataframes[[datei]] <- df_weltfussball_season_mit_zeit
 }
 
-clean_dataframe_names <- list(
-  "./weltfussball_liveticker/df_BL_1718.RData",
-  "./weltfussball_liveticker/df_BL_1819.RData",
-  "./weltfussball_liveticker/df_BL_1920.RData",
-  "./weltfussball_liveticker/df_BL_2021.RData",
-  "./weltfussball_liveticker/df_BL_2122.RData",
-  "./weltfussball_liveticker/df_BL_2223.RData"
-)
+#Dataframes bereinigen
 
 for(i in 1:length(dataframes)) {
   
   #Title enthält Ergebnis, Saison, Wettbewerb und Spieltag, die in eigene Spalten überführt werden sollen
   dataframes[[i]] <- dataframes[[i]] %>% 
     mutate(Result = str_extract(Title, "\\d+:\\d+")) %>% 
+    separate(Result, c("Result_Home", "Result_Away"), sep=":", remove=FALSE, convert=TRUE) %>% 
     mutate(Season = str_extract(Title, "\\d{4}/\\d{4}")) %>% 
     mutate(Competition = str_extract(Title, "(?<=\\().+?(?=\\d{4}/\\d{4})")) %>% 
     mutate(Matchday = str_extract(Title, "\\d+\\. Spieltag")) %>% 
-    mutate(Date = str_extract(Date, "\\d+-\\d+-\\d+"))
+    mutate(Date = str_extract(Date, "\\d+-\\d+-\\d+")) %>%
+    
+    #um Teams später als Factors verwenden zu können
+    mutate_at(vars(Team1,Team2), factor)
   
   #Spalten-Reihenfolge neu ordnen (ohne Title)
-  neue_reihenfolge <- c("Team1", "Team2", "Matchday", "Competition", "Season", "Date", "Kickoff", "Result", "Text")
+  neue_reihenfolge <- c("Team1", "Team2", "Matchday", "Competition", "Season", "Date", "Kickoff", "Result", "Result_Home", "Result_Away", "Text")
   dataframes[[i]] <- dataframes[[i]][, neue_reihenfolge]
-  
-  str(dataframes[[i]])
-  
-  #save.image()
-  #save(dataframes[[i]], file = clean_dataframe_names[[i]])
 }
 
+#bereinigte Dataframes speichern
+
 df_BL_1718 <- dataframes[[1]]
+save(df_BL_1718, file = "./weltfussball_liveticker/df_BL_1718.RData")
 df_BL_1819 <- dataframes[[2]]
+save(df_BL_1819, file = "./weltfussball_liveticker/df_BL_1819.RData")
 df_BL_1920 <- dataframes[[3]]
+save(df_BL_1819, file = "./weltfussball_liveticker/df_BL_1920.RData")
 df_BL_2021 <- dataframes[[4]]
+save(df_BL_1819, file = "./weltfussball_liveticker/df_BL_2021.RData")
 df_BL_2122 <- dataframes[[5]]
+save(df_BL_1819, file = "./weltfussball_liveticker/df_BL_2122.RData")
 df_BL_2223 <- dataframes[[6]]
+save(df_BL_1819, file = "./weltfussball_liveticker/df_BL_2223.RData")
+
