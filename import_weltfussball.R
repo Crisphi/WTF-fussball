@@ -6,6 +6,7 @@ library(methods)
 library(purrr)
 
 #Skript zum Import von Saison-Korpora als xml-Files von weltfussball.de
+#Output: Dateien mit Dataframes, pro Saison ein df mit zusammengefügten Liveticker-Texten pro Spiel
 
 #---Variablen---
 
@@ -122,4 +123,3 @@ for(i in 1:length(files)){
   
   print("done")
 }
-
