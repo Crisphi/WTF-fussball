@@ -61,9 +61,12 @@ pts_per_team_and_season %>%
     ggplot(aes(x =Season, y= Points_Sum, colour = Team, group= Team)) +
     geom_line() +
     geom_point() +
-    #coord_cartesian(ylim = c(16, 85)) +
     theme(axis.text.x = element_text(angle = -45, hjust = 0)) +
     facet_wrap(vars(Team))
+
+dateipfad <- "./plots/team-pt_plot.png"
+#ggsave(dateipfad, width = 10, height = 6, units = "in")
+
 
 pts_per_team_and_season %>%
   group_by(Team) %>%
@@ -73,3 +76,5 @@ pts_per_team_and_season %>%
   #coord_cartesian(ylim = c(16, 85)) +
   theme(axis.text.x = element_text(angle = -45, hjust = 0)) 
 
+dateipfad <- "./plots/team-pt-all_plot.png"
+#ggsave(dateipfad, width = 10, height = 6, units = "in")
