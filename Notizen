@@ -10,3 +10,6 @@ Ideen:
 - Ergebnis aus dem Titel extrahieren und in eigene Spalte übertragen
 - Vorberichte, Fazit und Spiel-Ticker voneinander trennen
 - Datum vereinheitlichen (ohne Wochentag)
+- Rangordnung der Ergebnisse implementieren (Heimsieg/Unentschieden/Auswärtssieg, Sortieren nach Höhe)
+- Auswertung von Gelben und Roten Karten (z.B. in Abhängigkeit von Spielminuten/Abschnitten)
+- Irgendwas mit Spitznamen von Teams/Vereinen
