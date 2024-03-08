@@ -9,7 +9,7 @@ library(ggwordcloud)
 library(wordcloud)
 
 # --- Load Dataframe and get Text ---
-load("./weltfussball_liveticker/df_BL_1718_bis_2223_pt")
+load("./weltfussball_liveticker/df_BL_1718_bis_2223_pt.RData")
 
 # --- Remove Text-Elements that are currently not relevant to ease computation ---
 df_livetexts <- df_BL_1718_bis_2223_pt %>% 
@@ -36,7 +36,8 @@ df_livetexts <- df_livetexts %>%
   mutate(Text = str_replace_all(Text, "\n" , " "))
 # View(df_livetexts)
 
-
+# df_livetexts speichern
+save(df_livetexts, file = "./weltfussball_liveticker/df_livetexts.RData")
 
 texts <- head(df_livetexts$Text, 10) #später head entfernen
 
@@ -177,14 +178,19 @@ table(as.character(query_result$hits$feature))
 # --- tidytext ---
 
 livetexts_tidy <- as_tibble(corpus$tokens) %>% 
-  inner_join(corpus$meta, by = "doc_id") %>% 
+  inner_join(corpus$meta, by = "doc_id") # %>% 
   # ggf. Spalten mit Metadaten ausblenden
-  select(doc_id, sentence, token_id, token, token2, feature) %>% 
-  mutate(word = token2)
+  # select(doc_id, sentence, token_id, token, token2, feature) %>% 
+  # mutate(word = token2)
 livetexts_tidy
 
 # count words
 livetexts_tidy %>% count(word, sort = TRUE)
 
-#wordcloud
+# wordcloud
 livetexts_tidy %>% count(word) %>% with(wordcloud(word, n, max.words=50))
+
+
+# --- corups_old, corpus & livetexts_tidy speichern ---
+
+save(corpus, corpus_old, livetexts_tidy, file = "./weltfussball_liveticker/corpus.RData")

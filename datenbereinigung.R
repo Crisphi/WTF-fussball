@@ -57,7 +57,7 @@ save(df_BL_2223, file = "./weltfussball_liveticker/df_BL_2223.RData")
 
 df_BL_1718_bis_2223 <- bind_rows(df_BL_1718, df_BL_1819, df_BL_1920,
                                  df_BL_2021, df_BL_2122, df_BL_2223)
-save(df_BL_1718_bis_2223, file = "./weltfussball_liveticker/df_BL_1718_bis_2223")
+save(df_BL_1718_bis_2223, file = "./weltfussball_liveticker/df_BL_1718_bis_2223.RData")
 
 
 #-------------------------------------------------------------------------------
@@ -119,6 +119,6 @@ save(df_BL_2223_pt, file = "./weltfussball_liveticker/df_BL_2223_pt.RData")
 
 df_BL_1718_bis_2223_pt <- bind_rows(df_BL_1718_pt, df_BL_1819_pt, df_BL_1920_pt,
                                  df_BL_2021_pt, df_BL_2122_pt, df_BL_2223_pt)
-save(df_BL_1718_bis_2223_pt, file = "./weltfussball_liveticker/df_BL_1718_bis_2223_pt")
+save(df_BL_1718_bis_2223_pt, file = "./weltfussball_liveticker/df_BL_1718_bis_2223_pt.RData")
 
 print("done")
