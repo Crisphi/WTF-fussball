@@ -10,6 +10,13 @@ library(readxl)
 
 #Dateipfade der Rohdaten
 files <- list(
+  "./weltfussball_liveticker/bundesliga-2011-2012.xml",
+  "./weltfussball_liveticker/bundesliga-2012-2013.xml", 
+  "./weltfussball_liveticker/bundesliga-2013-2014.xml", 
+  "./weltfussball_liveticker/bundesliga-2014-2015.xml", 
+  "./weltfussball_liveticker/bundesliga-2015-2016.xml", 
+  "./weltfussball_liveticker/bundesliga-2016-2017.xml",
+  
   "./weltfussball_liveticker/bundesliga-2017-2018.xml", 
   "./weltfussball_liveticker/bundesliga-2018-2019.xml", 
   "./weltfussball_liveticker/bundesliga-2019-2020.xml", 
@@ -21,6 +28,13 @@ files <- list(
 #Dateipfade zum Export der Dataframes
 
 fnames <- list(
+  "./weltfussball_liveticker/df_weltfussball_1112_pt.RData",
+  "./weltfussball_liveticker/df_weltfussball_1213_pt.RData",
+  "./weltfussball_liveticker/df_weltfussball_1314_pt.RData",
+  "./weltfussball_liveticker/df_weltfussball_1415_pt.RData",
+  "./weltfussball_liveticker/df_weltfussball_1516_pt.RData",
+  "./weltfussball_liveticker/df_weltfussball_1617_pt.RData",
+  
   "./weltfussball_liveticker/df_weltfussball_1718_pt.RData",
   "./weltfussball_liveticker/df_weltfussball_1819_pt.RData",
   "./weltfussball_liveticker/df_weltfussball_1920_pt.RData",
