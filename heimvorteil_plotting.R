@@ -1,12 +1,15 @@
 library(tidyverse)
 library(ggplot2)
 
-#import Output-Dateien von datenbereinigung.R
+# --- Fragestellung: Gibt es den Heimovorteil?
+# Vermutung: Mehr Heim- als Auswärtssiege
+
+# import Output-Dateien von datenbereinigung.R
 
 load("./weltfussball_liveticker/df_BL_1718_bis_2223.RData")
 dataframe <- df_BL_1718_bis_2223
 
-#Erstellen der Spalte result_category mit Werten "Heimsieg", "Unentschieden" und "Auswärtssieg"
+# Erstellen der Spalte result_category mit Werten "Heimsieg", "Unentschieden" und "Auswärtssieg"
 dataframe$result_category <- ifelse(dataframe$Result_Home > dataframe$Result_Away, "Heimsieg",
                                     ifelse(dataframe$Result_Home == dataframe$Result_Away, "Unentschieden",
                                            "Auswärtssieg"))
@@ -24,9 +27,9 @@ summary_stats <- dataframe %>%
   as.data.frame()
 
 
-#---Plotting---
+# ---Plotting---
 
-#Vergleich der Verteilung von Heim-, Auswärtssiegen & Unentschieden pro Saison in absoluter Häufigkeit
+# Vergleich der Verteilung von Heim-, Auswärtssiegen & Unentschieden pro Saison in absoluter Häufigkeit
 
 abbreviations <- c("Heimsieg" = "HS", "Unentschieden" = "U", "Auswärtssieg" = "AS")
 
@@ -42,3 +45,5 @@ ggplot(dataframe, aes(x = result_category, fill = result_category)) +
 
 dateipfad <- "./plots/heimvorteil_plot.png"
 ggsave(dateipfad, width = 10, height = 6, units = "in")
+
+# Fazit: deutliche Tendenz zu mehr Heim- als Auswärtssiege
