@@ -46,8 +46,9 @@ fnames <- list(
 #---Funktionen---
 
 #Funktion zum extrahieren der Metadaten aus der XML-Struktur der Metadaten pro Spiel
-extrahiere_metadaten <- function(text_element) {
+extrahiere_metadaten <- function(text_element, id) {
   list(
+    game_id = sprintf("%03d", id),
     Title = xml_text(xml_find_first(text_element, ".//title")),
     Team1 = xml_text(xml_find_first(text_element, ".//team1")),
     Team2 = xml_text(xml_find_first(text_element, ".//team2")),
@@ -74,7 +75,7 @@ for (i in 1:length(files)) {
     
     iteration_count <- iteration_count + 1
     
-    metadata <- extrahiere_metadaten(text_tag)
+    metadata <- extrahiere_metadaten(text_tag, iteration_count)
     
     p_tags <- xml_find_all(text_tag, ".//p")
     p_text <- xml_text(p_tags)
@@ -82,7 +83,8 @@ for (i in 1:length(files)) {
     time_tags <- xml_find_all(text_tag, ".//time")
     time_text <- xml_text(time_tags)
     
-    df <- data.frame(Title = metadata$Title,
+    df <- data.frame(game_ID = metadata$game_id,
+                     Title = metadata$Title,
                      Date = metadata$Date,
                      Kickoff = metadata$Kickoff,
                      Team1 = metadata$Team1,
