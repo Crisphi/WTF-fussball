@@ -100,10 +100,13 @@ for(i in 1:length(pt_dataframes)) {
     mutate(Date = str_extract(Date, "\\d+-\\d+-\\d+")) %>%
     
     #um Teams später als Factors verwenden zu können
-    mutate_at(vars(Team1,Team2), factor)
+    mutate_at(vars(Team1,Team2), factor) %>% 
+  
+  # Spalte game_id hinzufügen
+    mutate(game_ID = paste("game", Season, game_ID, sep = "_"))
   
   #Spalten-Reihenfolge neu ordnen (ohne Title)
-  neue_reihenfolge <- c("Team1", "Team2", "Matchday", "Competition", "Season", "Date", "Kickoff", "Result", "Time", "Text")
+  neue_reihenfolge <- c("game_ID", "Team1", "Team2", "Matchday", "Competition", "Season", "Date", "Kickoff", "Result", "Time", "Text")
   pt_dataframes[[i]] <- pt_dataframes[[i]][, neue_reihenfolge]
 }
 

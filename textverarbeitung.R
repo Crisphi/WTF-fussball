@@ -20,11 +20,8 @@ df_livetexts_1718_bis_2223 <- df_BL_1718_bis_2223_pt %>%
   filter(Text != "Anpfiff 2. Halbzeit ") %>%
   filter(Text != "Ende 1. Halbzeit") %>%
   filter(Text != "Spielbeginn") %>% 
-  #filter(!str_starts(Text, "Tooor")) %>% 
   filter(!str_starts(Text, "Einwechslung")) %>% 
   filter(!str_starts(Text, "Auswechslung")) %>% 
-  #filter(!str_starts(Text, "Gelbe Karte")) %>% 
-  #filter(!str_starts(Text, "Rote Karte")) %>% 
   filter(!str_starts(Text, "Offizielle Nachspielzeit"))
 
 # replace minutes, scores, numbers, quotes
@@ -35,7 +32,10 @@ df_livetexts_1718_bis_2223 <- df_livetexts_1718_bis_2223 %>%
   mutate(Text = str_replace_all(Text, "\\d+:\\d+", "@score@")) %>%
   mutate(Text = str_replace_all(Text, "\\s+\\d+\\s*\\.", " @other_num@")) %>% 
   mutate(Text = str_replace_all(Text, '\"', ' @quote@ ')) %>%
-  mutate(Text = str_replace_all(Text, "\n" , " "))
+  mutate(Text = str_replace_all(Text, "\n" , " ")) %>% 
+  mutate(Text = str_replace_all(Text, "Tooor für .*?, @score@ durch .*?\\s.*?\\s+", "@goal@ ")) %>% 
+  mutate(Text = str_replace_all(Text, "Gelbe Karte für .*?\\)\\s+", "@yellow_card@ ")) %>% 
+  mutate(Text = str_replace_all(Text, "Rote Karte für .*?\\)\\s+", "@red_card@ "))
 # View(df_livetexts_1718_bis_2223)
 
 # df_livetexts speichern
@@ -144,18 +144,18 @@ dfm_weighted %>%  tidy() %>% arrange(desc(count))
 # doc_30359 <- subset(corpus_1718_bis_2223, subset_meta = doc_id == "doc_30359")
 # doc_30359$tokens
 
-query_result <- search_features(corpus_1718_bis_2223, 
-                                feature = "token",
-                                query = c("VAR", "Videoassistent", "Videoschiedsrichter"))
-table(as.character(query_result$hits$feature))
-
+# query_result <- search_features(corpus_1718_bis_2223, 
+#                                 feature = "token",
+#                                 query = c("VAR", "Videoassistent", "Videoschiedsrichter"))
+# table(as.character(query_result$hits$feature))
+# 
 # --- tidytext ---
 
-livetexts_tidy <- as_tibble(corpus_1718_bis_2223$tokens) %>% 
-  inner_join(corpus_1718_bis_2223$meta, by = "doc_id") # %>% 
+livetexts_tidy <- as_tibble(corpus_1718_bis_2223$tokens) %>%
+  inner_join(corpus_1718_bis_2223$meta, by = "doc_id") %>%
   # ggf. Spalten mit Metadaten ausblenden
-  # select(doc_id, sentence, token_id, token, token2, feature) %>% 
-  # mutate(word = token2)
+  select(doc_id, sentence, token_id, token, token2, feature) %>%
+  mutate(word = token2)
 livetexts_tidy
 
 # count words
@@ -168,12 +168,12 @@ livetexts_tidy
 # --- corups_old, corpus & livetexts_tidy speichern ---
 
 save(corpus_1718_bis_2223, corpus_1718_bis_2223_old, livetexts_tidy,
-     file = "./weltfussball_liveticker/corpus.RData")
+     file = "./weltfussball_liveticker/corpus_1718_bis_2223.RData")
 
 
 # ------------------------------------------------------------------------------
 
-# --- nochmal für Saisons 11/12 bis 16/217 ---
+# --- nochmal für Saisons 11/12 bis 16/17 ---
 
 # --- Load Dataframe and get Text ---
 load("./weltfussball_liveticker/df_BL_1112_bis_1617_pt.RData")
@@ -185,22 +185,22 @@ df_livetexts_1112_bis_1617 <- df_BL_1112_bis_1617_pt %>%
   filter(Text != "Anpfiff 2. Halbzeit ") %>%
   filter(Text != "Ende 1. Halbzeit") %>%
   filter(Text != "Spielbeginn") %>% 
-  #filter(!str_starts(Text, "Tooor")) %>% 
   filter(!str_starts(Text, "Einwechslung")) %>% 
   filter(!str_starts(Text, "Auswechslung")) %>% 
-  #filter(!str_starts(Text, "Gelbe Karte")) %>% 
-  #filter(!str_starts(Text, "Rote Karte")) %>% 
   filter(!str_starts(Text, "Offizielle Nachspielzeit"))
 
 # replace minutes, scores, numbers, quotes
 
-df_livetexts_1718_bis_2223 <- df_livetexts_1718_bis_2223 %>% 
+df_livetexts_1112_bis_1617 <- df_livetexts_1112_bis_1617 %>% 
   mutate(Text = str_replace_all(Text, "\\d+\\. Minute", "@min@")) %>%
   mutate(Text = str_replace_all(Text, "\\(\\d+\\.\\)", "@br_min@")) %>%
   mutate(Text = str_replace_all(Text, "\\d+:\\d+", "@score@")) %>%
   mutate(Text = str_replace_all(Text, "\\s+\\d+\\s*\\.", " @other_num@")) %>% 
   mutate(Text = str_replace_all(Text, '\"', ' @quote@ ')) %>%
-  mutate(Text = str_replace_all(Text, "\n" , " "))
+  mutate(Text = str_replace_all(Text, "\n" , " ")) %>% 
+  mutate(Text = str_replace_all(Text, "Tooor für .*?, @score@ durch .*?\\s.*?\\s+", "@goal@ ")) %>% 
+  mutate(Text = str_replace_all(Text, "Gelbe Karte für .*?\\)\\s+", "@yellow_card@ ")) %>% 
+  mutate(Text = str_replace_all(Text, "Rote Karte für .*?\\)\\s+", "@red_card@ "))
 # View(df_livetexts_1112_bis_1617)
 
 # df_livetexts speichern
@@ -317,10 +317,10 @@ table(as.character(query_result$hits$feature))
 # --- tidytext ---
 
 livetexts_tidy <- as_tibble(corpus_1112_bis_1617$tokens) %>% 
-  inner_join(corpus_1112_bis_1617$meta, by = "doc_id") # %>% 
+  inner_join(corpus_1112_bis_1617$meta, by = "doc_id") %>% 
 # ggf. Spalten mit Metadaten ausblenden
-# select(doc_id, sentence, token_id, token, token2, feature) %>% 
-# mutate(word = token2)
+  select(doc_id, sentence, token_id, token, token2, feature) %>% 
+  mutate(word = token2)
 livetexts_tidy
 
 # count words
@@ -333,4 +333,4 @@ livetexts_tidy %>% count(word) %>% with(wordcloud(word, n, max.words=50))
 # --- corups_old, corpus & livetexts_tidy speichern ---
 
 save(corpus_1112_bis_1617, corpus_1112_bis_1617_old, livetexts_tidy,
-     file = "./weltfussball_liveticker/corpus.RData")
+     file = "./weltfussball_liveticker/corpus_1112_bis_1617.RData")
