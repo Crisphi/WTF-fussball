@@ -5,6 +5,7 @@ library(readxl)
 
 #Skript zum Import von Saison-Korpora als xml-Files von weltfussball.de
 #Output: Dateien mit Dataframes, pro Saison ein df mit je einer Zeile pro p-Tag mit zugehörigem time-Tag
+#Getrennt in 11/12-16/17 und 17/18-22/23, weil zur Saison 17/18 der VAR eingeführt wurde. Durch Trennung Vergleich beider Zeiträume möglich
 
 #---Variablen---
 
