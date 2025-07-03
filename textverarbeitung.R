@@ -8,6 +8,8 @@ library(topicmodels)
 library(ggwordcloud)
 library(wordcloud)
 
+#knüpft an datenbereinigung.R an
+
 # --- für Saisons 17/18 bis 22/23 ---
 
 # --- Load Dataframe and get Text ---
