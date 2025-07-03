@@ -15,6 +15,15 @@ Ideen:
 - Irgendwas mit Spitznamen von Teams/Vereinen
 - Anzahl der Texte pro Team insgesamt
 
+oral_traits_table1
+- Reihen: Saisons
+- Spalten:
+  - avg. number of entries per game
+  - avg. number of sentences per game
+  - avg. number of sentences per entry
+  - avg. sentence length in words
+  - avg. commentary length in words
+
 2025
 - Topic Modelling
 - Concordance Analysis & Word Embeddings
