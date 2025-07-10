@@ -29,3 +29,16 @@ oral_traits_table1
 - Concordance Analysis & Word Embeddings
 - Antconq
 - Hypothese testen: In Spielen ohne Zuschauer wirkte sich der Heimvorteil signifikant weniger stark aus.
+  - Zuschauer Ja/Nein Spalte
+  -> Logistische Regr., Log-Likelihood, Chi-Test
+
+Statistiken für das Corpus
+- Gesamtwörter zählen
+- Einzigartige Wörter
+
+Topic Modelling
+
+
+Referenzkorpus: DWDS? Frequenzen
+
+Andreas github: AndreasBlombach
