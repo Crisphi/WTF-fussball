@@ -42,3 +42,14 @@ Topic Modelling
 Referenzkorpus: DWDS? Frequenzen
 
 Andreas github: AndreasBlombach
+
+16.07.
+- Annotation mit openNLP und corpustools laufen aufs gleiche hinaus - was ist geeigneter für spätere Analysen wie topic modelling?
+
+
+Hürden bei 2025_textverarbeitung:
+- nicht kapiert, dass openNLP Pipeline und corpustools pipeline aufs gleiche hinauslaufen und nur eins notwendig ist
+- keine Lemmatisierung auf dem tokens_df möglich, braucht zusammengesetzte Texte und nicht die tokens
+- keine NER möglich, da kein Modell auf Deutsch verfügbar
+- erst später festgestellt, das POS-Tagging fehlerhaft, vermutlich weil POS-Tokenizer auf Englisch eingestellt
+- Pfadabhängigkeit: weil ich schon ganz viel mit openNLP geschrieben habe, wollte ich nicht nochmal mit corpustools oder udpipe von vorne beginnen

@@ -7,8 +7,12 @@ library(corpustools)
 library(topicmodels)
 library(ggwordcloud)
 library(wordcloud)
+library(dplyr)
+library(readr)
+library(stringr)
+library(progress)
 
-#knüpft an datenbereinigung.R an
+# knüpft an datenbereinigung.R an
 
 # --- für Saisons 17/18 bis 22/23 ---
 
@@ -43,7 +47,8 @@ df_livetexts_1718_bis_2223 <- df_livetexts_1718_bis_2223 %>%
 # df_livetexts speichern
 save(df_livetexts_1718_bis_2223, file = "./weltfussball_liveticker/df_livetexts_1718_bis_2223.RData")
 
-texts <- head(df_livetexts_1718_bis_2223$Text, 10) #später head entfernen
+# texts <- head(df_livetexts_1718_bis_2223$Text, 10)
+texts <- df_livetexts_1718_bis_2223$Text
 
 # --- Sentence Annotation ---
 
@@ -77,7 +82,7 @@ token_annotation <- annotate(txt,
 # --- POS Annotation ---
 
 pos_tagger <- Maxent_POS_Tag_Annotator()
-annotation <- annotate(txt, pos_tagger, token_annotation)
+annotation <- annotate(txt, pos_tagger, token_annotation) # funktioniert 2025 nicht mehr, zu groß
 # annotation
 
 tokens <- txt[annotation[annotation$type == "word"]]
@@ -89,8 +94,9 @@ pos_sequence <- as.character(unlist(
 ))
 
 
-livetexts_tibble <- tibble(ID = 1:length(tokens), Token = tokens, POS = pos_sequence)
-livetexts_tibble
+livetexts_tibble_1718_bis_2223 <- tibble(ID = 1:length(tokens), Token = tokens, POS = pos_sequence)
+save(livetexts_tibble_1718_bis_2223, file = "livetexts_tibble_1718_bis_2223.RData")
+livetexts_tibble_1718_bis_2223
 
 # --- Corpustools ---
 
@@ -153,23 +159,23 @@ dfm_weighted %>%  tidy() %>% arrange(desc(count))
 # 
 # --- tidytext ---
 
-livetexts_tidy <- as_tibble(corpus_1718_bis_2223$tokens) %>%
+livetexts_tidy_1718_bis_2223 <- as_tibble(corpus_1718_bis_2223$tokens) %>%
   inner_join(corpus_1718_bis_2223$meta, by = "doc_id") %>%
   # ggf. Spalten mit Metadaten ausblenden
-  select(doc_id, sentence, token_id, token, token2, feature) %>%
+  dplyr::select(doc_id, sentence, token_id, token, token2, feature) %>%
   mutate(word = token2)
-livetexts_tidy
+livetexts_tidy_1718_bis_2223
 
 # count words
-# livetexts_tidy %>% count(word, sort = TRUE)
+livetexts_tidy_1718_bis_2223 %>% count(word, sort = TRUE)
 
 # wordcloud
-# livetexts_tidy %>% count(word) %>% with(wordcloud(word, n, max.words=50))
+livetexts_tidy_1718_bis_2223 %>% count(word) %>% with(wordcloud(word, n, max.words=50))
 
 
 # --- corups_old, corpus & livetexts_tidy speichern ---
 
-save(corpus_1718_bis_2223, corpus_1718_bis_2223_old, livetexts_tidy,
+save(corpus_1718_bis_2223, corpus_1718_bis_2223_old, livetexts_tidy_1718_bis_2223,
      file = "./weltfussball_liveticker/corpus_1718_bis_2223.RData")
 
 
@@ -208,8 +214,9 @@ df_livetexts_1112_bis_1617 <- df_livetexts_1112_bis_1617 %>%
 # df_livetexts speichern
 save(df_livetexts_1112_bis_1617, file = "./weltfussball_liveticker/df_livetexts_1112_bis_1617.RData")
 
-texts <- head(df_livetexts_1112_bis_1617$Text, 10) #später head entfernen
-
+# texts <- head(df_livetexts_1112_bis_1617$Text, 10)
+texts <- df_livetexts_1112_bis_1617$Text
+              
 # --- Sentence Annotation ---
 
 sentence_annotator <- Maxent_Sent_Token_Annotator(language = "de")
@@ -254,8 +261,9 @@ pos_sequence <- as.character(unlist(
 ))
 
 
-livetexts_tibble <- tibble(ID = 1:length(tokens), Token = tokens, POS = pos_sequence)
-livetexts_tibble
+livetexts_tibble_1112_bis_1617 <- tibble(ID = 1:length(tokens), Token = tokens, POS = pos_sequence)
+save(livetexts_tibble_1112_bis_1617, file = "livetexts_tibble_1112_bis_1617.RData")
+livetexts_tibble_1112_bis_1617
 
 # --- Corpustools ---
 
@@ -318,21 +326,32 @@ table(as.character(query_result$hits$feature))
 
 # --- tidytext ---
 
-livetexts_tidy <- as_tibble(corpus_1112_bis_1617$tokens) %>% 
+livetexts_tidy_1112_bis_1617 <- as_tibble(corpus_1112_bis_1617$tokens) %>% 
   inner_join(corpus_1112_bis_1617$meta, by = "doc_id") %>% 
 # ggf. Spalten mit Metadaten ausblenden
-  select(doc_id, sentence, token_id, token, token2, feature) %>% 
+  dplyr::select(doc_id, sentence, token_id, token, token2, feature) %>% 
   mutate(word = token2)
-livetexts_tidy
+livetexts_tidy_1112_bis_1617
 
 # count words
-livetexts_tidy %>% count(word, sort = TRUE)
+livetexts_tidy_1112_bis_1617 %>% count(word, sort = TRUE)
 
 # wordcloud
-livetexts_tidy %>% count(word) %>% with(wordcloud(word, n, max.words=50))
+livetexts_tidy_1112_bis_1617 %>% count(word) %>% with(wordcloud(word, n, max.words=50))
 
 
 # --- corups_old, corpus & livetexts_tidy speichern ---
 
-save(corpus_1112_bis_1617, corpus_1112_bis_1617_old, livetexts_tidy,
+save(corpus_1112_bis_1617, corpus_1112_bis_1617_old, livetexts_tidy_1112_bis_1617,
      file = "./weltfussball_liveticker/corpus_1112_bis_1617.RData")
+
+
+# --- Ergänzungen Juli 2025 ---
+
+# DFM untersuchen
+livetexts_tidy_1718_bis_2223 %>% 
+  filter(doc_id == "doc_97683") %>% 
+  arrange(token_id) %>%
+  # group_by(sentence) %>% 
+  summarise(text = paste(token, collapse = " ")) %>% 
+  pull(text)

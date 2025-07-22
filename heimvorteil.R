@@ -86,13 +86,13 @@ df_modified_for_glm <- df_filtered %>%
     # hier evtl. unwichtige Spalten rausfiltern
   )
 
-model <- glm(is_home_win ~ Season, family = binomial, data = df_modified_for_glm)
-summary(model)
+model_season <- glm(is_home_win ~ Season, family = binomial, data = df_modified_for_glm)
+summary(model_season)
 
 # aus Log-Odds die Wahrscheinlichkeiten auf Heimsieg pro Saison berechnen
 odds_per_season <- data.frame(Season = levels(df_modified_for_glm$Season))
 
-odds_per_season$log_odds <- predict(model, newdata = odds_per_season, type = "link") # type = "response" ist auch möglich und gibt die Wahrscheinlichkeit direkt zurück, aber "link" für Berechnung der Konfidenzintervalle wichtig
+odds_per_season$log_odds <- predict(model_season, newdata = odds_per_season, type = "link") # type = "response" ist auch möglich und gibt die Wahrscheinlichkeit direkt zurück, aber "link" für Berechnung der Konfidenzintervalle wichtig
 odds_per_season$probability <- plogis(odds_per_season$log_odds) # bei type = "response" entfällt diese Zeile
 print(odds_per_season)
 
@@ -101,7 +101,7 @@ print(odds_per_season)
 
 odds_per_season <- data.frame(Season = levels(df_modified_for_glm$Season))
 
-pred <- predict(model, newdata = odds_per_season, type = "link", se.fit = TRUE)
+pred <- predict(model_season, newdata = odds_per_season, type = "link", se.fit = TRUE)
 
 odds_per_season <- odds_per_season %>% 
   mutate(
@@ -147,7 +147,7 @@ ggsave(dateipfad_2, width = 8, height = 5, dpi = 300, bg = "white")
 # Post-hoc-Test: Weicht die Saison 19/20 auch von den anderen Saisons signifikant ab, nicht nur von der Referenzsaison 17/18?
 
 # "Tukey" -> paarweise Vergleiche, mit Korrektur für Mehrfachtests
-tukey_result <- glht(model, linfct = mcp(Season = "Tukey")) # general linear hypothesis test, multiple comparison procedure
+tukey_result <- glht(model_season, linfct = mcp(Season = "Tukey")) # general linear hypothesis test, multiple comparison procedure
 summary(tukey_result)
 
 # Interpretation: p-Werte im Tukey-Test sind adjustiert für Mehrfachvergleiche, d.h. streng konservativ
@@ -184,13 +184,13 @@ df_modified_for_glm <- df_modified_for_glm %>%
   )
 
 # GLM in Abhängigkeit von public_allowed
-model_public_allowed <- glm(is_home_win ~ public_allowed, family = binomial, data = df_modified_for_glm)
-summary(model_public_allowed)
+model_public <- glm(is_home_win ~ public_allowed, family = binomial, data = df_modified_for_glm)
+summary(model_public)
 
 # Wahrscheinlichkeiten und Konfidenzintervalle berechnen
 odds_public <- data.frame(public_allowed = c(FALSE, TRUE))
 
-pred <- predict(model_public_allowed, newdata = odds_public, type = "link", se.fit = TRUE)
+pred <- predict(model_public, newdata = odds_public, type = "link", se.fit = TRUE)
 
 odds_public <- odds_public %>% 
   mutate(
@@ -233,4 +233,41 @@ ggplot(odds_public, aes(x = public_allowed, y = probability)) +
 dateipfad_3 <- "./plots/heimvorteil_public_plot.png"
 ggsave(dateipfad_3, width = 8, height = 5, dpi = 300, bg = "white")
 
-# ggf. am Ende noch Modellvergleich visualisieren mit jeweils Saison, Corona-Beschränkung (oder Nichts?) als Prädiktor
+# Modellvergleich: Likelihood-Ratio-Test (ohne Prädiktor, mit Saison oder Publikum als Prädiktor, mit beidem als Prädiktor)
+
+model_null <- glm(is_home_win ~ 1, family = binomial, data =df_modified_for_glm) # Modell ohne Prädiktor
+#summary(model_null)
+
+model_both <- glm(is_home_win ~ Season + public_allowed, family = binomial, data =df_modified_for_glm) # Modell mit Saison und Publikum als Prädiktor)
+#summary(model_both)
+
+anova(model_null, model_season, test = "Chisq") # --> p = 0.13: keine signifikante Verbesserung
+anova(model_null, model_public, test = "Chisq") # --> p = 0.0485: model_public signifikant besser als model_null
+anova(model_null, model_both, test = "Chisq") # --> p = 0.07: keine signifikante Verbesserung
+anova(model_public, model_both, test = "Chisq") # --> p = 0.17: keine signifikante Verbesserung
+
+# Visualisierung des Modellvergleichs
+
+model_tests <- tibble(
+  Vergleich = factor(
+    c("Basis vs. Saison", "Basis vs. Publikum", "Basis vs. Beide", "Publikum vs. Beide"), 
+    levels = c("Basis vs. Saison", "Basis vs. Publikum", "Basis vs. Beide", "Publikum vs. Beide")
+  ),
+  p_Wert = c(0.1352, 0.0485, 0.07224, 0.1748)
+)
+
+ggplot(model_tests, aes(x = Vergleich, y = p_Wert, fill = p_Wert < 0.05)) +
+  geom_col() +
+  scale_fill_manual(values = c("gray70", "forestgreen")) +
+  geom_text(aes(label = round(p_Wert, 3)), vjust = -0.5, size = 4.5) +
+  labs(
+    title = "Likelihood-Ratio-Test: Modellvergleiche",
+    x = "Modellvergleich",
+    y = "p-Wert"
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "none") +
+  geom_hline(yintercept = 0.05, linetype = "dashed", color = "red")
+
+dateipfad_4 <- "./plots/heimvorteil_modellvergleich_plot.png"
+ggsave(dateipfad_4, width = 8, height = 5, dpi = 300, bg = "white")

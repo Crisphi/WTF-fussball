@@ -26,8 +26,21 @@ Reihenfolge der Skripte:
    
 3. datenbereinigung.R
 
-   ...
+   Extrahiert Metadaten aus "Title" als eigene Spalten in passendem Format
+   Fasst die Meta- und Textdaten in zwei Dataframes zusammen, jeweils für 11/12 - 16/17 und 17/18 - 22/23
+   Zwei Dataframes deshalb, weil der VAR zur Saison 17/18 eingeführt wurde und Veränderungen im Text im Zusammenhang mit dem VAR zu erwarten sind
+   Vergleich der beiden Zeiträume dadurch möglich
    
-4. textverarbeitung.R
+4. heimvorteil.R
 
-   ...
+   Skript mit einer statistischen Auwertung der Metadaten zur Heimvorteil-Hypothese, basierend auf den Saisons 2017/18 bis 2022/23
+   Beinhaltet Binomialtest, versch. GLM-Modelle (Prädiktoren: Saison & Publikum), Likelihood-Ratio-Test und Visualisierungen
+   
+5. textverarbeitung.R bzw. *NEU* 2025_textverarbeitung.R
+
+   Bereinigt Liveticker-Daten zur Vorbereitung der Annotation, entfernt oder ersetzt irrelevante Elemente (z.B. Spielende, Einwechslung, Minutenangaben, Spielstände, etc.)
+   Satzannotation, Tokenisierung, POS-Annotation
+   Korpuserstellung, Preprocessing
+   Document Feature Matrix, word count, wordcloud
+   Topic Modelling
+   Generelle Korpus Statistiken
