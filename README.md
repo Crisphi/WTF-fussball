@@ -36,11 +36,11 @@ Reihenfolge der Skripte:
    Skript mit einer statistischen Auwertung der Metadaten zur Heimvorteil-Hypothese, basierend auf den Saisons 2017/18 bis 2022/23
    Beinhaltet Binomialtest, versch. GLM-Modelle (Prädiktoren: Saison & Publikum), Likelihood-Ratio-Test und Visualisierungen
    
-5. textverarbeitung.R bzw. *NEU* 2025_textverarbeitung.R
+5. textverarbeitung.R bzw. *NEU* 2025_textverarbeitung_openNLP.R
 
    Bereinigt Liveticker-Daten zur Vorbereitung der Annotation, entfernt oder ersetzt irrelevante Elemente (z.B. Spielende, Einwechslung, Minutenangaben, Spielstände, etc.)
    Satzannotation, Tokenisierung, POS-Annotation
    Korpuserstellung, Preprocessing
    Document Feature Matrix, word count, wordcloud
-   Topic Modelling
-   Generelle Korpus Statistiken
+   Topic Modelling (LDA)
+   Generelle Korpus Statistiken: durchschn. Liveticker-Länge, Einträge pro Spielminute, auffällige Wörter
